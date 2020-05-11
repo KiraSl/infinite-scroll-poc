@@ -1,26 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Section } from './Section'
+import { generateHexColor } from './utils/GenerateHexColor'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      sections: [
+        <Section color={generateHexColor()} index={1} key={1} />,
+        <Section color={generateHexColor()} index={2} key={2} />,
+        <Section color={generateHexColor()} index={3} key={3} />,
+      ]
+    }
+  }
+
+  render() {
+    const { sections } = this.state;
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > window.innerHeight) {
+        const elementIndex = sections[sections.length - 1].props.index
+        sections.shift()
+        sections.push(<Section color={generateHexColor()} index={elementIndex + 1} key={elementIndex + 1} />)
+        this.setState({ sections: sections })
+      }
+    })
+    return sections;
+  }
 }
 
 export default App;
